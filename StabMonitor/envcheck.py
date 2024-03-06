@@ -59,10 +59,11 @@ from string import Template
 # grafana:
 def req_node(serverip="192.168.67.251", clientip="192.168.67.250"):
 	"""
-    # 注册node_exporter服务
-    :param ip:
-    :return:
-    """
+	# 注册node_exporter服务
+	:param ip:
+	:return:
+	"""
+	print(f"serverip:{serverip},clientip:{clientip}")
 	url = "http://" + serverip + ":8500/v1/agent/service/register"
 	# url = "http://" + serverip + ":8500/ui/dc1/services"
 	print(url)
@@ -85,8 +86,8 @@ def req_node(serverip="192.168.67.251", clientip="192.168.67.250"):
 
 def generate_txt(TEMPLATE_PATH, RESULT_PATH, supervname, scriptpath, scriptcmd, logname):
 	"""
-    填充supervisor.conf模板
-    """
+	填充supervisor.conf模板
+	"""
 	with open(TEMPLATE_PATH, mode="r", encoding="utf-8") as r_f, open(
 			RESULT_PATH, mode="w", encoding="utf8"
 	) as w_f:
@@ -145,4 +146,13 @@ for name in dirname:
 
 command_start = f"service supervisor restart"
 run_comand(command_start)
-req_node(input("请输入服务器IP"), input("请输入客户端IP"))
+
+import sys
+
+# 打印传入的参数
+if len(sys.argv) == 3:
+	print(f"Server IP: {sys.argv[1]}, Client IP: {sys.argv[2]}")
+else:
+	print("This script requires exactly two arguments.")
+req_node(sys.argv[1], sys.argv[2])
+
